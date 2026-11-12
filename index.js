@@ -12,6 +12,8 @@ const DEFAULTS = {
     'ECONNRESET',             // TLS / network-level disconnect
     'fetch failed',           // Node fetch network failure
     'Unmarshal chat params',  // gateway failed to parse request body (400 bad_params; error suggests RETRY)
+    'upstream_stream_truncated', // stream ended mid-flight with HTTP 200, no terminal event seen
+    'stream ended before a completion event', // message form of the same truncation failure
   ],
   initialDelayMs: 3000,
   maxDelayMs: 300000,      // cap a single wait at 5 minutes
@@ -53,7 +55,8 @@ export function apply(ctx, config = {}) {
     if (payload?.signal?.aborted || /abort|cancel/i.test(code)) return next();
 
     // unmatched errors (401, invalid params, ...): not ours, fall through
-    if (!cfg.matchPatterns.some((pattern) => message.includes(pattern))) return next();
+    const haystack = code ? `${code} ${message}` : message;
+    if (!cfg.matchPatterns.some((pattern) => haystack.includes(pattern))) return next();
 
     const turn = payload?.turn;
     const isObj = turn && typeof turn === 'object';

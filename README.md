@@ -30,6 +30,10 @@ DSH（DeepSeekRuntime）插件：模型请求遇到**临时性上游故障**时�
 | `ECONNRESET` | 网络层断连 |
 | `fetch failed` | Node fetch 网络错误 |
 | `Unmarshal chat params` | 网关解析请求体失败（400 bad_params，报错自带 RETRY 建议） |
+| `upstream_stream_truncated` | 流中途截断（HTTP 200 但未收到终止事件，报错 code） |
+| `stream ended before a completion event` | 同上，报错 message 形态 |
+
+匹配同时查报错的 `code` 和 `message`（`code message` 拼接后做包含匹配），所以按 code 命中的错误（如 `upstream_stream_truncated`）不依赖 message 文本。
 
 ### 重试策略
 
