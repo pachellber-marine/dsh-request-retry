@@ -1,0 +1,37 @@
+{
+  "name": "dsh-request-retry",
+  "version": "1.0.0",
+  "description": "Auto-retry DSH model requests on transient upstream failures (5xx, circuit breaker, network resets) with exponential backoff — keeps the session alive instead of failing the turn.",
+  "license": "MIT",
+  "type": "module",
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "retry",
+    "backoff",
+    "resilience"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pachellber-marine/dsh-request-retry.git"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./cordis.patch.yml": "./cordis.patch.yml"
+  },
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

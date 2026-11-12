@@ -1,0 +1,12 @@
+- insert:
+    - id: request-retry
+      name: dsh-request-retry
+      # Optional overrides, merged over the plugin's DEFAULTS:
+      # config:
+      #   enabled: true
+      #   matchPatterns: ['No available channel', 'circuit open']
+      #   initialDelayMs: 3000
+      #   maxDelayMs: 300000
+      #   backoffMultiplier: 1.5
+      #   maxRetries: 0          # 0 = unlimited
+      #   maxRetryMs: 28800000   # 8h total window; 0 = never give up

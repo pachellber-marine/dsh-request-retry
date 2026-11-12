@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Request Retry",
+    "description": "Auto-retries model requests with exponential backoff on transient upstream failures (5xx, circuit breaker, network resets), until the upstream recovers."
+  }
+}
