@@ -23,6 +23,9 @@ const DEFAULTS = {
     'too many requests',      // 429 rate limit, message form
     'rate limit',             // 429 rate limit variants
     'overloaded',             // upstream overloaded (529-style), retry after capacity frees
+    '渠道不存在',             // newapi zh variant: "group XX model YY 的可用渠道不存在（retry）"
+    'channel:no_available_key', // newapi internal code: all channel keys failed, retry after recovery
+    '请稍后再试',             // newapi transient-error marker (group saturation etc.); deterministic errors never contain it
   ],
   initialDelayMs: 3000,
   maxDelayMs: 300000,      // cap a single wait at 5 minutes

@@ -43,6 +43,9 @@ DSH（DeepSeekRuntime）插件：模型请求遇到**临时性上游故障**时�
 | `too many requests` | 限流（429 常见措辞） |
 | `rate limit` | 限流（英文通用措辞） |
 | `overloaded` | 上游过载（部分厂商 529/503 措辞） |
+| `渠道不存在` | newapi 中文报错变体「分组 xx 下模型 yy 的可用渠道不存在（retry）」 |
+| `channel:no_available_key` | newapi 内部 code：渠道密钥全部失败（临时性，等渠道恢复） |
+| `请稍后再试` | newapi 临时性错误的通用标记（分组饱和等）；确定性错误文案均不含此词 |
 
 匹配同时查报错的 `code` 和 `message`（`code message` 拼接后做包含匹配），所以按 code 命中的错误（如 `upstream_stream_truncated`）不依赖 message 文本。
 
