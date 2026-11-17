@@ -8,6 +8,8 @@
 
 DSH（DeepSeekRuntime）插件：模型请求遇到**临时性上游故障**时自动重试，指数退避，直到上游恢复——而不是直接报「本轮运行失败」打断你的会话。
 
+定位：**面向中转站 / one-api / newapi 等 OpenAI 兼容网关用户的可靠性层**。这类网关的报错以临时性故障为主（无可用渠道、负载饱和、限流、流截断），且报错形态中英混杂——本插件内置了两套匹配词，开箱即用。
+
 如果你在用中转站、公益网关或任何不稳定的三方通道，多半见过这些报错：
 
 ```
@@ -32,6 +34,15 @@ DSH（DeepSeekRuntime）插件：模型请求遇到**临时性上游故障**时�
 | `Unmarshal chat params` | 网关解析请求体失败（400 bad_params，报错自带 RETRY 建议） |
 | `upstream_stream_truncated` | 流中途截断（HTTP 200 但未收到终止事件，报错 code） |
 | `stream ended before a completion event` | 同上，报错 message 形态 |
+| `request_body_busy` | 网关大请求解码预算占用（503，等活跃请求结束后重试） |
+| `large decoded request budget is busy` | 同上，报错 message 形态 |
+| `无可用渠道` | 中转站无可用渠道（临时性，渠道恢复后可重试） |
+| `当前分组` | 分组下暂无可用渠道/模型的常见措辞 |
+| `负载已饱和` | 中转站负载饱和（临时性） |
+| `insufficient_quota` | 上游配额暂时耗尽（部分网关为临时态） |
+| `too many requests` | 限流（429 常见措辞） |
+| `rate limit` | 限流（英文通用措辞） |
+| `overloaded` | 上游过载（部分厂商 529/503 措辞） |
 
 匹配同时查报错的 `code` 和 `message`（`code message` 拼接后做包含匹配），所以按 code 命中的错误（如 `upstream_stream_truncated`）不依赖 message 文本。
 
@@ -76,6 +87,8 @@ github:pachellber-marine/dsh-request-retry
 
 A DSH (DeepSeekRuntime) plugin that auto-retries model requests on **transient upstream failures** with exponential backoff, keeping the session alive until the upstream recovers — instead of failing the turn immediately.
 
+Positioning: a **reliability layer for users of OpenAI-compatible relays (one-api / newapi gateways)**. These gateways fail mostly with transient errors — no available channel, saturated load, rate limits, truncated streams — and their error messages come in both English and Chinese. This plugin ships match patterns for both, out of the box.
+
 If you route your models through relay stations, community gateways, or any third-party upstream, you have probably seen errors like these:
 
 ```
@@ -83,7 +96,6 @@ If you route your models through relay stations, community gateways, or any thir
 503 upstream-reset (circuit open, next probe +37s)
 400 Unmarshal chat params failed ...
 ```
-
 They share one property: **they go away on their own.** DSH's default handling retries a limited number of times and then fails the whole turn — losing a long generated answer and forcing you to resend. This plugin takes over the `agent/request-error` event: matching failures are resent after a backoff delay (reusing the same render assembly — no duplicated billing or injection), until the upstream recovers or the total window is exhausted. Everything else (auth errors, bad params, user cancellation) is handed back to DSH's default handling.
 
 ### Retry policy

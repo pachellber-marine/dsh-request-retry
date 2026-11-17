@@ -16,6 +16,13 @@ const DEFAULTS = {
     'stream ended before a completion event', // message form of the same truncation failure
     'request_body_busy',      // 503: gateway's large decoded request budget busy, another big request active
     'large decoded request budget is busy', // message form of the same 503
+    '无可用渠道',             // relay (one-api/newapi): no available channel, Chinese message form
+    '当前分组',               // relay: "当前分组 xx 下对于模型 yy 无可用渠道" style errors
+    '负载已饱和',             // relay: upstream saturated by load, retry after it drains
+    'insufficient_quota',     // relay: token/channel quota exhausted (recovers on rotation or top-up)
+    'too many requests',      // 429 rate limit, message form
+    'rate limit',             // 429 rate limit variants
+    'overloaded',             // upstream overloaded (529-style), retry after capacity frees
   ],
   initialDelayMs: 3000,
   maxDelayMs: 300000,      // cap a single wait at 5 minutes
