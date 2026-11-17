@@ -14,6 +14,8 @@ const DEFAULTS = {
     'Unmarshal chat params',  // gateway failed to parse request body (400 bad_params; error suggests RETRY)
     'upstream_stream_truncated', // stream ended mid-flight with HTTP 200, no terminal event seen
     'stream ended before a completion event', // message form of the same truncation failure
+    'request_body_busy',      // 503: gateway's large decoded request budget busy, another big request active
+    'large decoded request budget is busy', // message form of the same 503
   ],
   initialDelayMs: 3000,
   maxDelayMs: 300000,      // cap a single wait at 5 minutes

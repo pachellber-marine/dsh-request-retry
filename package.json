@@ -11,10 +11,6 @@
     "backoff",
     "resilience"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pachellber-marine/dsh-request-retry.git"
-  },
   "exports": {
     ".": "./index.js",
     "./locale/*.json": "./locale/*.json",
